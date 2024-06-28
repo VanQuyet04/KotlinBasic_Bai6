@@ -7,7 +7,7 @@ import com.example.kotlinbasic_bai6.model.ApiUser
 import com.example.kotlinbasic_bai6.repository.UserRepository
 import kotlinx.coroutines.launch
 
-class MainViewModel : ViewModel() {
+class UserViewModel : ViewModel() {
     private val userRepository = UserRepository()
     private val _users = MutableLiveData<List<ApiUser>>()
     val users: LiveData<List<ApiUser>> get() = _users

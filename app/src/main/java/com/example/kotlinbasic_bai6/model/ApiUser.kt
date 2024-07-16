@@ -1,7 +1,5 @@
 package com.example.kotlinbasic_bai6.model
 
-import java.util.TimeZone
-
 data class ApiUser(
     val name: Name,
     val email: String,

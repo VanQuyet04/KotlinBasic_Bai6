@@ -1,17 +1,16 @@
 package com.example.kotlinbasic_bai6.repository
 
-import android.annotation.SuppressLint
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.kotlinbasic_bai6.model.ApiUser
 import com.example.kotlinbasic_bai6.network.ApiResponse
-import com.example.kotlinbasic_bai6.network.RetrofitClient
+import com.example.kotlinbasic_bai6.network.ApiService
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import javax.inject.Inject
 
-class UserRepository {
-    private val apiService = RetrofitClient.instance
+class UserRepository @Inject constructor(private val apiService: ApiService) {
 
     fun getUsers(): LiveData<List<ApiUser>> {
         val data = MutableLiveData<List<ApiUser>>()
@@ -23,9 +22,8 @@ class UserRepository {
                 }
             }
 
-            @SuppressLint("NullSafeMutableLiveData")
             override fun onFailure(call: Call<ApiResponse>, t: Throwable) {
-                data.value = null
+                data.value = emptyList() // Handle error case appropriately
             }
         })
 

@@ -3,7 +3,6 @@ package com.example.kotlinbasic_bai6.ui.screen
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -14,23 +13,31 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.kotlinbasic_bai6.model.ApiUser
-import com.example.kotlinbasic_bai6.ui.theme.KotlinBasic_Bai6Theme
 import com.example.kotlinbasic_bai6.viewmodel.UserViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class UserListScreen : ComponentActivity() {
-    private val mainViewModel: UserViewModel by viewModels()
+
+    @Inject
+    lateinit var viewModel: UserViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContent {
             Surface(color = MaterialTheme.colorScheme.background) {
-                if (mainViewModel.users.observeAsState().value.isNullOrEmpty()) {
+                val users by viewModel.users.observeAsState(initial = emptyList())
+
+                if (users.isEmpty()) {
                     Text(text = "Loading...")
                 } else {
                     Column(
@@ -46,19 +53,16 @@ class UserListScreen : ComponentActivity() {
                             fontWeight = FontWeight.Bold
                         )
                         Spacer(modifier = Modifier.height(16.dp))
-                        UserList(mainViewModel)
+                        UserList(users)
                     }
                 }
             }
-
         }
     }
 }
 
 @Composable
-fun UserList(viewModel: UserViewModel) {
-    val users by viewModel.users.observeAsState(initial = emptyList())
-
+fun UserList(users: List<ApiUser>) {
     LazyColumn {
         items(users) { user ->
             UserItem(user)
@@ -72,8 +76,10 @@ fun UserItem(user: ApiUser) {
         AsyncImage(
             model = user.picture.large,
             contentDescription = null,
-            modifier = Modifier.size(64.dp),
-            contentScale = ContentScale.Crop
+            modifier = Modifier.size(80.dp)
+                .clip(MaterialTheme.shapes.medium)
+            ,
+            contentScale = ContentScale.Crop,
         )
         Spacer(modifier = Modifier.width(16.dp))
         Column {

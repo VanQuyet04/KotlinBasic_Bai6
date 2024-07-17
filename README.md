@@ -1,4 +1,3 @@
-Ứng dụng hiển thị danh sách task, với data được lấy từ KotlinBasic_Bai5 bằng cách sử dụng Content provider
-Sử dụng work manager để tạo nhắc nhở thường xuyên cho các task dựa vào datetime của task
+- Ứng dụng hiển thị danh sách user , data được fetch từ Api có sẵn, build dựa vào Retrofit2
 
 Áp dụng mô hình MVVM và có sử dụng DaggerHilt 
